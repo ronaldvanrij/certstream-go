@@ -18,7 +18,7 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 
 	go func() {
 		for {
-			c, _, err := websocket.DefaultDialer.Dial("wss://certstream.calidog.io", nil)
+			c, _, err := websocket.DefaultDialer.Dial("wss://certstream.calidog.io/full-stream", nil)
 
 			if err != nil {
 				errStream <- errors.Wrap(err, "Error connecting to certstream! Sleeping a few seconds and reconnecting... ")
