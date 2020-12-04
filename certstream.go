@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	pingPeriod time.Duration = 15 * time.Second
+	pingPeriod time.Duration = 5 * time.Second
 )
 
 func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan error) {
