@@ -38,7 +38,10 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 				for {
 					select {
 					case <-ticker.C:
-						c.WriteMessage(websocket.PingMessage, nil)
+						if err := c.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
+                            errStream <- errors.Wrap(err, "Error sending ping, terminating ping sender")
+                            return
+                        }
 					case <-done:
 						return
 					}
@@ -51,8 +54,7 @@ func CertStreamEventStream(skipHeartbeats bool) (chan jsonq.JsonQuery, chan erro
 				err = c.ReadJSON(&v)
 				if err != nil {
 					errStream <- errors.Wrap(err, "Error decoding json frame!")
-					c.Close()
-					break
+					continue
 				}
 
 				jq := jsonq.NewQuery(v)
